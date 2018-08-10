@@ -209,6 +209,7 @@
 #define SRIO0_DMA_IRQ_1			174
 #define SRIO1_DMA_IRQ_0			175
 #define SRIO1_DMA_IRQ_1			176
+#define RTPS_SMMU_IRQ			177
 #endif
 #define APU_CTI_IRQ_0				139
 #define APU_CTI_IRQ_1				140

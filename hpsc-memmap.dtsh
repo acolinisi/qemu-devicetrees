@@ -232,6 +232,8 @@ name: name@addr64 {														\
 #define SIOU				0xFD3D0000
 #define SMMU_GPV			0xFD800000
 #define SMMU_REG			0xFD5F0000
+#define RTPS_SMMU			0x38800000
+#define RTPS_SMMU_REG			0x385F0000
 #ifdef HPSC__
 #define SPI0				0xA0005000
 #else

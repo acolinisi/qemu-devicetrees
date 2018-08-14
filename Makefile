@@ -34,9 +34,13 @@ SINGLE_ARCH_OUTDIR		:= $(OUTDIR)/LATEST/SINGLE_ARCH
 MULTI_ARCH_OUTDIR 		:= $(OUTDIR)/LATEST/MULTI_ARCH
 LQSPI_XIP_OUTDIR		:= $(OUTDIR)/LATEST/LQSPI_XIP
 
-DTS_FILES			:= $(wildcard *.dts)
-DTSI_FILES			:= $(wildcard *.dtsi)
-HEADER_FILES		:= $(wildcard *.dtsh)
+#DTS_FILES			:= $(wildcard *.dts)
+#DTSI_FILES			:= $(wildcard *.dtsi)
+#HEADER_FILES		:= $(wildcard *.dtsh)
+
+DTS_FILES			:= hpsc-arch.dts
+DTSI_FILES			:= 
+HEADER_FILES			:= hpsc.dtsh hpsc-irqs.dtsh hpsc-memmap.dtsh hpsc-irq-map.dtsh
 
 .PHONY:	all source
 

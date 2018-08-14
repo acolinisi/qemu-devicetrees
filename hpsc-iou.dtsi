@@ -551,36 +551,6 @@ glue(ocm_mem_ctrl_, n): glue(ocm_mem_ctrl_, n)@n {			\
 			timer-width = <32>;
 		};
 
-		uart_clk: uart_clk {
-			#clock-cells = <0>;
-			clock-frequency = <25000000>;
-			compatible = "fixed-clock";
-		};
-		ps7_uart_0: serial@UART0 {
-			compatible = "xlnx,ps7-uart-1.00.a", "xlnx,xuartps";
-			current-speed = <115200>;
-			interrupts = <UART0_IRQ_0>;
-			port-number = <1>;
-			reg = <BASE_ADDR(UART0) 0x1000>;
-			xlnx,has-modem = <0x0>;
-			xlnx,uart-clk-freq-hz = <50000000>;
-			clock-names = "uart_clk", "pclk";
-			clocks = <&uart_clk &uart_clk>;
-			ttrig-polarity = <1>;
-		};
-		ps7_uart_1: serial@UART1 {
-			compatible = "xlnx,ps7-uart-1.00.a", "xlnx,xuartps";
-			current-speed = <115200>;
-			interrupts = <UART1_IRQ_0>;
-			port-number = <0>;
-			reg = <BASE_ADDR(UART1) 0x1000>;
-			xlnx,has-modem = <0x0>;
-			xlnx,uart-clk-freq-hz = <50000000>;
-			clock-names = "uart_clk", "pclk";
-			clocks = <&uart_clk &uart_clk>;
-			ttrig-polarity = <1>;
-			status = "disabled";
-		};
 #ifdef HPSC_TEST
 		ps7_uart_2: serial@UART2 {
 			compatible = "xlnx,ps7-uart-1.00.a", "xlnx,xuartps";
@@ -596,24 +566,6 @@ glue(ocm_mem_ctrl_, n): glue(ocm_mem_ctrl_, n)@n {			\
 			status = "disabled";
 		};
 #endif
-		rtps_trch_mailbox: mailbox@RTPS_HPPS_MAILBOX {
-			compatible = "hpsc,hpsc-mbox";
-			interrupts = <RTPS_TRCH_MAILBOX_IRQ_0 RTPS_TRCH_MAILBOX_IRQ_1>;
-			reg = <BASE_ADDR(RTPS_TRCH_MAILBOX) 0x80000>;
-		};
-
-		hpps_trch_mailbox: mailbox@HPPS_TRCH_MAILBOX {
-			compatible = "hpsc,hpsc-mbox";
-			interrupts = <HPPS_TRCH_MAILBOX_IRQ_0 HPPS_TRCH_MAILBOX_IRQ_1>;
-			reg = <BASE_ADDR(HPPS_TRCH_MAILBOX) 0x80000>;
-		};
-
-		hpps_rtps_mailbox: mailbox@HPPS_RTPS_MAILBOX {
-			compatible = "hpsc,hpsc-mbox";
-			interrupts = <HPPS_RTPS_MAILBOX_IRQ_0 HPPS_RTPS_MAILBOX_IRQ_1>;
-			reg = <BASE_ADDR(HPPS_RTPS_MAILBOX) 0x80000>;
-		};
-
 		ocm_ctrl0: ocm_ctrl@OCM {
 			compatible = "xlnx,zynqmp-ocmc";
 			memsize = <OCM_SIZE>;
@@ -680,76 +632,6 @@ glue(ocm_mem_ctrl_, n): glue(ocm_mem_ctrl_, n)@n {			\
 		ZDMA_CHANNEL(adma6, adma, ADMA_6_BASE, ADMA_IRQ_6, 64, &smmu_tbu2, 0x86e);
 		ZDMA_CHANNEL(adma7, adma, ADMA_7_BASE, ADMA_IRQ_7, 64, &smmu_tbu2, 0x86f);
 
-
-		rtps_smmu_tbu0: mr {
-			#address-cells = <MEMORY_ADDRESS_CELLS>;
-			#size-cells = <1>;
-			compatible = "simple-bus";
-			ranges ;
-		};
-		rtps_smmu_reg: smmu0@RTPS_SMMU_REG {
-			compatible = "xlnx,smmu-reg";
-			reg = <BASE_ADDR(RTPS_SMMU_REG) 0x1000>;
-			interrupt-controller;
-			interrupts = <RTPS_SMMU_IRQ>;
-		};
-		rtps_smmu: smmu0@RTPS_SMMU {
-			compatible = "arm,mmu-500";
-			reg-extended = <&amba BASE_ADDR(RTPS_SMMU) 0x10000
-					&rtps_smmu_tbu0 BASE_ADDR(0) 0xffffffff 0xffffffff>;
-
-			interrupt-parent = <&rtps_smmu_reg>;
-			interrupts = <0 1 2 3 4 5 6 7 8
-					8 9 10 11 12 13 14 15 16
-					17>;
-
-			/* dma:  points to the MR used for PTWs.  */
-			/* mr-x: points to the per TBU down-stream MR.  */
-			dma = <&amba_rpu>;
-			mr-0 = <&amba_rpu>;
-		};
-
-
-		trch_dma: dma-controller@0x3000b000 {
-			compatible = "arm,pl330", "arm,primecell";
-			reg = <0x0 0x3000b000 0x1000>;
-			interrupts = <TRCH_DMA_IRQ_0
- 				      TRCH_DMA_IRQ_1>;
-			#dma-cells = <1>;
-		};
-
-		rtps_dma: dma-controller@0x38440000 {
-			compatible = "arm,pl330", "arm,primecell";
-			reg = <0x0 0x38440000 0x1000>;
-			interrupts = <RTPS_DMA_IRQ_0
- 				      RTPS_DMA_IRQ_1>;
-			#dma-cells = <1>;
-			dma = <&rtps_smmu_tbu0>;
-		};
-
-		hpps_dma: dma-controller@0xf92e0000 {
-			compatible = "arm,pl330", "arm,primecell";
-			reg = <0x0 0xf92e0000 0x1000>;
-			interrupts = <HPPS_DMA_IRQ_0
- 				      HPPS_DMA_IRQ_1>;
-			#dma-cells = <1>;
-		};
-
-		srio0_dma: dma-controller@0xe5310000 {
-			compatible = "arm,pl330", "arm,primecell";
-			reg = <0x0 0xe5310000 0x1000>;
-			interrupts = <SRIO0_DMA_IRQ_0
- 				      SRIO0_DMA_IRQ_1>;
-			#dma-cells = <1>;
-		};
-
-		srio1_dma: dma-controller@0xe5320000 {
-			compatible = "arm,pl330", "arm,primecell";
-			reg = <0x0 0xe5320000 0x1000>;
-			interrupts = <SRIO1_DMA_IRQ_0
- 				      SRIO1_DMA_IRQ_1>;
-			#dma-cells = <1>;
-		};
 
 		crl: crl@CRL_APB {
 			compatible = "xlnx,zynqmp-crl";

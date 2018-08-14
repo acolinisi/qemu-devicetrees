@@ -47,33 +47,29 @@ NAME ## _memattr: NAME ## _ma {						\
 / {
 	MEMATTR(pmu, SECURE, 0x40);
 
-	MEMATTR(apu0_s, SECURE, 0x80);
-	MEMATTR(apu0_ns, NON_SECURE, 0x80);
-	MEMATTR(apu1_s, SECURE, 0x8d);
-	MEMATTR(apu1_ns, NON_SECURE, 0x8d);
-	MEMATTR(apu2_s, SECURE, 0x8e);
-	MEMATTR(apu2_ns, NON_SECURE, 0x8e);
-	MEMATTR(apu3_s, SECURE, 0x8f);
-	MEMATTR(apu3_ns, NON_SECURE, 0x8f);
-	MEMATTR(apu4_s, SECURE, 0x90);
-	MEMATTR(apu4_ns, NON_SECURE, 0x90);
-	MEMATTR(apu5_s, SECURE, 0x9d);
-	MEMATTR(apu5_ns, NON_SECURE, 0x9d);
-	MEMATTR(apu6_s, SECURE, 0x9e);
-	MEMATTR(apu6_ns, NON_SECURE, 0x9e);
-	MEMATTR(apu7_s, SECURE, 0x9f);
-	MEMATTR(apu7_ns, NON_SECURE, 0x9f);
+	MEMATTR(hpps_cpu0_s, SECURE, 0x80);
+	MEMATTR(hpps_cpu0_ns, NON_SECURE, 0x80);
+	MEMATTR(hpps_cpu1_s, SECURE, 0x8d);
+	MEMATTR(hpps_cpu1_ns, NON_SECURE, 0x8d);
+	MEMATTR(hpps_cpu2_s, SECURE, 0x8e);
+	MEMATTR(hpps_cpu2_ns, NON_SECURE, 0x8e);
+	MEMATTR(hpps_cpu3_s, SECURE, 0x8f);
+	MEMATTR(hpps_cpu3_ns, NON_SECURE, 0x8f);
+	MEMATTR(hpps_cpu4_s, SECURE, 0x90);
+	MEMATTR(hpps_cpu4_ns, NON_SECURE, 0x90);
+	MEMATTR(hpps_cpu5_s, SECURE, 0x9d);
+	MEMATTR(hpps_cpu5_ns, NON_SECURE, 0x9d);
+	MEMATTR(hpps_cpu6_s, SECURE, 0x9e);
+	MEMATTR(hpps_cpu6_ns, NON_SECURE, 0x9e);
+	MEMATTR(hpps_cpu7_s, SECURE, 0x9f);
+	MEMATTR(hpps_cpu7_ns, NON_SECURE, 0x9f);
 
-	MEMATTR(rpu0, SECURE, 0x2e);
-	MEMATTR(rpu1, SECURE, 0x2f);
+	MEMATTR(rtps_cpu0, SECURE, 0x2e);
+	MEMATTR(rtps_cpu1, SECURE, 0x2f);
 
-#ifdef HPSC_NVIC
-	MEMATTR(trch, SECURE, 0x2d);
-#endif
-	MEMATTR(gem0, NON_SECURE, 0x874);
-	MEMATTR(gem1, NON_SECURE, 0x875);
-	MEMATTR(gem2, NON_SECURE, 0x876);
-	MEMATTR(gem3, NON_SECURE, 0x877);
+	MEMATTR(trch_cpu0, SECURE, 0x2d);
+
+	MEMATTR(xgmac, NON_SECURE, 0x874);
 	MEMATTR(qspi_dma, NON_SECURE, 0x873);
 
 	MEMATTR(pcie_ns, NON_SECURE, 0x4d0);

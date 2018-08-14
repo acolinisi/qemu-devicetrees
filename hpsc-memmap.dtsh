@@ -69,29 +69,13 @@ name: name@addr64 {														\
 
 
 #define ACPU_GIC_STRIDE		0x10000
-#ifdef HPSC_NEW_MEM
-#define APU_GIC_DIST		0xFD3FF000
-/* #define APU_GIC_DIST		0xF9000000 */
-#define ACPU_GIC_DIST		0xF9010000
-#define ACPU_GIC		0xF9020000
-#define ACPU_GIC_HYP		0xF9040000
-#define ACPU_GIC_VCPU		0xF9060000
+
+#define HPPS_GIC_DIST		0xFD3FF000
 
 /* DK: temporary */
-#define R5_GIC_DIST		0xF9A00000
-#define R5_GIC			0xF9A01000
+#define RTPS_GIC_DIST		0xF9A00000
+#define RTPS_GIC		0xF9A01000
 
-#else
-#define APU_GIC_DIST		0xFD3FF000
-
-#define ACPU_GIC_DIST		0xF9010000
-#define ACPU_GIC		0xF9020000
-#define ACPU_GIC_HYP		0xF9040000
-#define ACPU_GIC_VCPU		0xF9060000
-
-#define R5_GIC_DIST		0xF9000000
-#define R5_GIC			0xF9001000
-#endif
 
 #define RTPS_TRCH_MAILBOX	0x3000a000
 #define HPPS_TRCH_MAILBOX	0xF9220000
@@ -187,10 +171,7 @@ name: name@addr64 {														\
 #define FPD_XMPU_CFG		0xFD5D0000
 #define FPD_XMPU_SINK		0xFD4F0000
 #define FPS_APM				0xFD490000
-#define GEM0				0xFF0B0000
-#define GEM1				0xFF0C0000
-#define GEM2				0xFF0D0000
-#define GEM3				0xFF0E0000
+#define XGMAC   			0xE5300000
 #ifdef HPSC__
 #define GPIO				0xA0003000
 #else
@@ -233,7 +214,11 @@ name: name@addr64 {														\
 #define SMMU_GPV			0xFD800000
 #define SMMU_REG			0xFD5F0000
 #define RTPS_SMMU			0x38800000
-#define RTPS_SMMU_REG			0x385F0000
+#define RTPS_SMMU_REG			0x38801000
+#define HPPS_SMMU0			0xF92F0000
+#define HPPS_SMMU0_REG			0xF92F1000
+#define HPPS_SMMU1			0xF92F2000
+#define HPPS_SMMU1_REG			0xF92F3000
 #ifdef HPSC__
 #define SPI0				0xA0005000
 #else
@@ -245,6 +230,12 @@ name: name@addr64 {														\
 #define TTC1				0xFF120000
 #define TTC2				0xFF130000
 #define TTC3				0xFF140000
+
+#define LSIO_UART0			0x30000000
+#define LSIO_UART1			0x30001000
+#define HSIO_UART0			0xF92C0000
+
+#if 0
 #define UART0				0xFF000000
 #ifdef HPSC__
 #define UART1				0xFF010000
@@ -252,9 +243,18 @@ name: name@addr64 {														\
 #else
 #define UART1				0xFF010000
 #endif
+#endif
+
+
 #define USB3_0				0xFF9D0000
 #define USB3_0_XHCI			0xFE200000
 #define USB3_1				0xFF9E0000
 #define USB3_1_XHCI			0xFE300000
 #define WDT					0xFD4D0000
 #define SERDES				0xFD400000
+
+#define TRCH_SRAM 			0x00000000
+#define TRCH_SRAM_SIZE 			0x00100000
+
+#define RTPS_DDR_LOW			0x40000000
+#define HPPS_DDR_LOW			0x80000000

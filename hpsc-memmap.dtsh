@@ -70,7 +70,8 @@ name: name@addr64 {														\
 
 #define ACPU_GIC_STRIDE		0x10000
 
-#define HPPS_GIC_DIST		0xFD3FF000
+#define HPPS_GIC_DIST		0xF9000000
+#define HPPS_GIC    		0xF9100000
 
 /* DK: temporary */
 #define RTPS_GIC_DIST		0xF9A00000

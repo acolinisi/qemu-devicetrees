@@ -437,7 +437,7 @@
         trch_sram: trch_sram { /* TODO: or is SRAM a slave on nic1? */
             compatible = "qemu:memory-region";
             qemu,ram = <1>;
-            reg = <0x0 TRCH_SRAM TRCH_SRAM_SIZE>;
+            reg = <TRCH_SRAM TRCH_SRAM_SIZE>;
         };
 
         to_nic1 {

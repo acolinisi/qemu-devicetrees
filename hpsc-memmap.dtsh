@@ -254,8 +254,11 @@ name: name@addr64 {														\
 #define WDT					0xFD4D0000
 #define SERDES				0xFD400000
 
-#define TRCH_SRAM 			0x00000000
+#define TRCH_SRAM 			0x20000000
 #define TRCH_SRAM_SIZE 			0x00100000
+
+#define TRCH_ROM  			0x00000000
+#define TRCH_ROM_SIZE 			0x00100000
 
 #define RTPS_DDR_LOW			0x40000000
 #define HPPS_DDR_LOW			0x80000000

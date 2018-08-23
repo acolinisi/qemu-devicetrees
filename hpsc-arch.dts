@@ -421,7 +421,9 @@
             };
         };
     };
+
     trch: trch { /* view of address space from TRCH CPU */
+        #priority-cells = <1>;
         compatible = "simple-bus";
         ranges ;
 
@@ -429,15 +431,15 @@
             compatible = "arm,armv7m_nvic";
             interrupt-controller;
             #interrupt-cells = <3>;
-            reg = <0x0 0xe000e000 0x1000>;
+            reg = <0xe000e000 0x1000 /* prio = */ 0x0>;
             num-irq = <256>;
             cpu-id = <0>; /* TODO: could this be a ref to the cpu node? */
         };
 
-        trch_sram: trch_sram { /* TODO: or is SRAM a slave on nic1? */
+        trch_rom: trch_rom { /* accessed over I-/D-Code bus, so not over nic1 */
             compatible = "qemu:memory-region";
             qemu,ram = <1>;
-            reg = <TRCH_SRAM TRCH_SRAM_SIZE>;
+            reg = <TRCH_ROM TRCH_ROM_SIZE /* prio = */ 0x1>;
         };
 
         to_nic1 {
@@ -657,12 +659,20 @@
         compatible = "simple-bus";
         ranges ;
 
+        trch_sram: trch_sram { /* TODO: could this also be accessed over I-/D-Code bus?
+                                  If so, then we should move the definition one level
+                                  above and add aliases to both here nic1{} and trch{}  */
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <TRCH_SRAM TRCH_SRAM_SIZE /* prio = */ 0x1>;
+        };
+
         /* TODO: does this exist in HPSC? Which NIC is it connected to? */
         crl: crl@CRL_APB {
             gpio-controller;
             #gpio-cells = <1>;
             compatible = "xlnx,zynqmp-crl";
-            reg = <CRL_APB 0x1000>;
+            reg = <CRL_APB 0x1000 /* prio = */ 0x0>;
             num-gpios = <16>; // is it controller(3) or client(1)?
             // pmu_global_client_gpios[] in xilinx_zynqmp_pmu_global.c
             //        : out: "error_2_out"
@@ -675,7 +685,7 @@
 
         trch_dma: dma-controller@TRCH_DMA {
             compatible = "arm,pl330", "arm,primecell";
-            reg = <TRCH_DMA 0x1000>;
+            reg = <TRCH_DMA 0x1000 /* prio= */ 0x0>;
             interrupts = <TRCH_DMA_IRQ_0
                           TRCH_DMA_IRQ_1>;
             #dma-cells = <1>;
@@ -685,7 +695,7 @@
         to_nic2 {
             compatible = "qemu:memory-region";
             alias = <&nic2>;
-            reg = <0x0 0x38000000 0x1000 0x0>;
+            reg = <0x38000000 0x1000 /* prio = */ 0x0>;
         };
 
         to_nic5 {
@@ -845,7 +855,7 @@
         hpps_smmu0: smmu0@HPPS_SMMU0 {
             compatible = "arm,mmu-500";
             reg-extended = <&nic5 HPPS_SMMU0 0x10000  /* prio = */ 0x0 /* nic5? */
-                            &nic5 0 0xffffffff 0xffffffff  /* prio = */ 0x0>; /* master connected to slave interface of MMU */
+                            &nic5 0          0xffffffff  /* prio = */  0xfffffffe>; /* master connected to slave interface of MMU */
 
             interrupt-parent = <&hpps_smmu0_reg>;
             interrupts = <0 1 2 3 4 5 6 7 8
@@ -863,7 +873,8 @@
         to_nic4 { /* lsio */
                 compatible = "qemu:memory-region";
                 alias = <&nic4>;
-                reg = <0x02800000 0x2e000000 /* prio = */ 0x0>;
+                /* reg = <0x30000000 0x3000b0000 * prio = * 0x0>; */
+                reg = <0x0 0xffffffff /* prio = -1 */ 0xffffffff>;
         };
 
     };

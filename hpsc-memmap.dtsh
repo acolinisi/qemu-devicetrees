@@ -262,3 +262,9 @@ name: name@addr64 {														\
 
 #define RTPS_DDR_LOW			0x40000000
 #define HPPS_DDR_LOW			0x80000000
+
+#define HPPS_ROM			0x00000000
+#define HPPS_ROM_SIZE			   0x40000
+
+#define HPPS_SRAM			0xFFFC0000
+#define HPPS_SRAM_SIZE			   0x40000

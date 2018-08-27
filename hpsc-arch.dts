@@ -609,6 +609,8 @@
     };
 
     hpps: hpps { /* view of address space from HPPS CPUs */
+        #priority-cells = <1>;
+
         compatible = "simple-bus";
         ranges ;
 
@@ -618,8 +620,8 @@
                 #interrupt-cells = <3>;
                 #gpio-cells = <0>;
                 compatible = "arm,arm-gicv3";
-                reg = < HPPS_GIC_DIST  0x20000    /* GICD */
-                        HPPS_GIC      0x100000>;  /* GICR */
+                reg = < HPPS_GIC_DIST  0x20000    /* GICD */ /* prio = */ 0x0
+                        HPPS_GIC      0x100000    /* GICR */ /* prio = */ 0x0>;
                 interrupt-controller ;
                 num-irq = <320>;
                 interrupts-extended =
@@ -659,6 +661,26 @@
                          <1 11 0xff01>,
                          <1 10 0xff01>;
             clock-frequency = <100000000>;
+        };
+
+        /* TODO: this will go away: no OCM on Chiplet */
+        hpps_rom: hpps_rom@HPPS_ROM {
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <HPPS_ROM HPPS_ROM_SIZE /* prio = */ 0x1>;
+        };
+
+        /* TODO: this will go away: no OCM on Chiplet */
+        hpps_sram: hpps_sram@HPPS_SRAM {
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <HPPS_SRAM HPPS_SRAM_SIZE /* prio = */ 0x1>;
+        };
+
+        to_ccn {
+            compatible = "qemu:memory-region";
+            alias = <&ccn>;
+            reg = <0x0 0xFFFFFFFF /* prio = -1 */ 0xffffffff>;
         };
     };
 
@@ -1018,19 +1040,22 @@
         hpps_ddr_low: hpps_ddr_low { /* TODO: TZC400 */
             compatible = "qemu:memory-region";
             device_type = "memory";
+            qemu,ram = <1>;
             reg = <HPPS_DDR_LOW 0x40000000 /* prio = */ 0x0>;
         };
 
         to_nic6 {
             compatible = "qemu:memory-region";
             alias = <&nic6>;
-            reg = <0xF9220000 0x000C0000 /* prio = -1 */ 0xffffffff>;
+            /* reg = <0xF9220000 0x000C0000 * prio = -1 * 0xffffffff>; */ /* TODO: why does this not work? */
+            reg = <0x0 0xffffffff /* prio = -1 */ 0xffffffff>;
         };
 
         to_nic7 {
             compatible = "qemu:memory-region";
             alias = <&nic7>;
-            reg = <0xE3000000 0x02330000 /* prio = -1 */ 0xffffffff>;
+            /* reg = <0xE3000000 0x02330000 * prio = -1 * 0xffffffff>; */ /* TODO: why does this not work? */
+            reg = <0x0 0xffffffff /* prio = -2 */ 0xfffffffe>;
         };
     };
 

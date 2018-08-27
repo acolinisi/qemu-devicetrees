@@ -442,6 +442,14 @@
             reg = <TRCH_ROM TRCH_ROM_SIZE /* prio = */ 0x1>;
         };
 
+        /* TODO: to be replaced with Boeing design for reset controller */
+        crf: crf@CRF_APB {
+            compatible = "xlnx,zynqmp_crf";
+            reg = <CRF_APB 0x110 /* prio = */ 0x0>;
+            gpio-controller;
+            #gpio-cells = <1>;
+        };
+
         to_nic1 {
             #priority-cells = <1>;
             compatible = "qemu:memory-region";
@@ -717,6 +725,7 @@
                 compatible = "simple-bus";
                 ranges ;
                 /* TODO: does this exist in HPSC? Which NIC is it connected to? */
+                /* TODO: move to nic1, since this is to be replaced by Boeing reset controller */
                 rpu_ctrl: rpu_control@RPU {
                     gpio-controller;
                     #gpio-cells = <1>;
@@ -1012,14 +1021,6 @@
             compatible = "qemu:memory-region";
             device_type = "memory";
             reg = <HPPS_DDR_LOW 0x40000000 /* prio = */ 0x0>;
-        };
-
-        /* TODO: does this exist in HPSC? Which NIC is it connected to? */
-        crf: crf@CRF_APB {
-            compatible = "xlnx,zynqmp_crf";
-            reg = <CRF_APB 0x110 /* prio = */ 0x0>;
-            gpio-controller;
-            #gpio-cells = <1>;
         };
 
         to_nic6 {

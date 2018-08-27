@@ -208,7 +208,7 @@
                 arm,ccsidr1 = <0x201fe019>;               \
                 enable-method = "psci";                   \
                 arm,reset-hivecs = <1>;                   \
-                arm,rvbar = <0xfffff000>;                 \
+                arm,rvbar = <0xfffea000>;                 \
                 arm,reset-cbar = <A9_SCU>;                \
                 mr = <&hpps>;                             \
                 memory = <&hpps>;                         \

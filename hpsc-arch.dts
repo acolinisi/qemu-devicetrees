@@ -475,7 +475,6 @@
                 num-irq = <320>;
                 /* interrupts-extended = TODO; */
                 num-cpu = <2>;
-                cpus = <1>; /* TODO: other cpus */
                 revision = <3>;
                 #redistributor-regions = <1>;
         };
@@ -643,7 +642,6 @@
                         <&hpps_gic 0x1 0x9 0x804>;
 
                 num-cpu = <8>;
-                cpus = <3>; /* TODO: other cpus */
                 revision = <3>;
                 #redistributor-regions = <1>;
         };

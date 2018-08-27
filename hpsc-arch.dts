@@ -212,6 +212,7 @@
                 arm,reset-cbar = <A9_SCU>;                \
                 mr = <&hpps>;                             \
                 memory = <&hpps>;                         \
+                memory_ns = <&hpps>;                      \
 
 
             hpps_memattr_cpu0_s: hpps_memattr_cpu_s@0 {

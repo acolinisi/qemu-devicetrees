@@ -326,7 +326,7 @@
                 gdb-id = "HPPS Cortex-A53 #4";
 
                 reg = <0x0 0x104>;
-                arm,mp-affinity = <0x104>;
+                arm,mp-affinity = <0x4>;
 
                 gpios = <&crf 0x4>;
                 gpio-names = "rst_cntrl";
@@ -350,7 +350,7 @@
                 gdb-id = "HPPS Cortex-A53 #5";
 
                 reg = <0x0 0x105>;
-                arm,mp-affinity = <0x105>;
+                arm,mp-affinity = <0x5>;
 
                 gpios = <&crf 0x5>;
                 gpio-names = "rst_cntrl";
@@ -373,7 +373,7 @@
                 gdb-id = "HPPS Cortex-A53 #6";
 
                 reg = <0x0 0x106>;
-                arm,mp-affinity = <0x106>;
+                arm,mp-affinity = <0x6>;
 
                 gpios = <&crf 0x6>;
                 gpio-names = "rst_cntrl";
@@ -396,7 +396,7 @@
                 gdb-id = "HPPS Cortex-A53 #7";
 
                 reg = <0x0 0x107>;
-                arm,mp-affinity = <0x107>;
+                arm,mp-affinity = <0x7>;
 
                 gpios = <&crf 0x7>;
                 gpio-names = "rst_cntrl";

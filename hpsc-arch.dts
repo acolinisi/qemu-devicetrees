@@ -663,6 +663,15 @@
             clock-frequency = <100000000>;
         };
 
+        cxtsgen@IOU_SCNTR { /* TODO: present in Chiplet? ATF wants this. */
+                compatible = "arm.generic-timer";
+                reg = <IOU_SCNTRS 0x1000 /* prio = */0x1>;
+        };
+        csu_core { /* TODO: present in Chiplet? Probably, not. ATF wants this. */
+            compatible = "xlnx,zynqmp-csu-core";
+            reg = <CSU 0x100 /* prio = */ 0x1>;
+        };
+
         /* TODO: this will go away: no OCM on Chiplet */
         hpps_rom: hpps_rom@HPPS_ROM {
             compatible = "qemu:memory-region";

@@ -827,8 +827,7 @@
             status = "disabled";
         };
 
-#if 0
-        lsio_uart_0: serial@LSIO_UART1 {
+        lsio_uart_1: serial@LSIO_UART1 {
             compatible = "xlnx,ps7-uart-1.00.a", "xlnx,xuartps";
             reg = <LSIO_UART1 0x1000>;
             current-speed = <115200>;
@@ -841,7 +840,6 @@
             ttrig-polarity = <1>;
             status = "disabled";
         };
-#endif
 
             /* TODO: SMC353 */
             /* TODO: GPIO */
@@ -885,7 +883,6 @@
                 /* reg = <0x30000000 0x3000b0000 * prio = * 0x0>; */
                 reg = <0x0 0xffffffff /* prio = -1 */ 0xffffffff>;
         };
-
     };
 
     nic6: nic6 {

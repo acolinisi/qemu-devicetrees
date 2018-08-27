@@ -56,14 +56,10 @@
 #define I2C1_IRQ_0					18
 #define SPI0_IRQ_0					19
 #define SPI1_IRQ_0					20
-#if 0
-#define UART0_IRQ_0					21	/* + 32 ==> 53 */
-#define UART1_IRQ_0					22
-#endif
-#define LSIO_UART0_IRQ_0					22
-//#define LSIO_UART1_IRQ_0					22
-#define HSIO_UART0_IRQ_0					21 	/* + 32 ==> 53 */
-#define CAN0_IRQ_0					23
+#define LSIO_UART0_IRQ_0					21
+#define LSIO_UART1_IRQ_0					22
+#define HSIO_UART0_IRQ_0					23 	/* + 32 ==> 53 */
+/* #define CAN0_IRQ_0					23 */
 #define CAN1_IRQ_0					24
 #define APM_INTC_OCM_IRQ_0			25
 #define APM_LPD_FPD_IRQ_0			25

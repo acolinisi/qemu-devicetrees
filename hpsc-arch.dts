@@ -1,6 +1,57 @@
-#include "hpsc-irqs.dtsh"
-#include "hpsc-memmap.dtsh"
-#include "hpsc-master-ids.dtsh"
+#define MASTER_ID_TRCH_CPU  0x2d
+
+#define MASTER_ID_RTPS_CPU0 0x2e
+#define MASTER_ID_RTPS_CPU1 0x2f
+
+#define MASTER_ID_HPPS_CPU0 0x80
+#define MASTER_ID_HPPS_CPU1 0x8d
+#define MASTER_ID_HPPS_CPU2 0x8e
+#define MASTER_ID_HPPS_CPU3 0x8f
+#define MASTER_ID_HPPS_CPU4 0x90
+#define MASTER_ID_HPPS_CPU5 0x9d
+#define MASTER_ID_HPPS_CPU6 0x9e
+#define MASTER_ID_HPPS_CPU7 0x9f
+
+#define MASTER_ID_XGMAC     0x874
+
+/* TODO: renumber IRQs */
+
+#define LSIO_UART0_IRQ_0		 21
+#define LSIO_UART1_IRQ_0		 22
+#define HPPS_UART0_IRQ_0		 23
+
+#define XGMAC_IRQ_0			 57
+#define XGMAC_IRQ_1_WAKE		 58
+
+#define RTPS_TRCH_MAILBOX_IRQ_0		161
+#define RTPS_TRCH_MAILBOX_IRQ_1		162
+#define HPPS_TRCH_MAILBOX_IRQ_0		163
+#define HPPS_TRCH_MAILBOX_IRQ_1		164
+#define HPPS_RTPS_MAILBOX_IRQ_0		165
+#define HPPS_RTPS_MAILBOX_IRQ_1		166
+
+#define TRCH_DMA_IRQ_0			167
+#define TRCH_DMA_IRQ_1			168
+#define RTPS_DMA_IRQ_0			169
+#define RTPS_DMA_IRQ_1			170
+#define HPPS_DMA_IRQ_0			171
+#define HPPS_DMA_IRQ_1			172
+#define SRIO0_DMA_IRQ_0			173
+#define SRIO0_DMA_IRQ_1			174
+#define SRIO1_DMA_IRQ_0			175
+#define SRIO1_DMA_IRQ_1			176
+
+#define RTPS_SMMU_IRQ			177
+#define HPPS_SMMU0_IRQ			178
+#define HPPS_SMMU1_IRQ			179
+
+#if 0 /* TODO: check if used before adding */
+#define CRL_int_IRQ_0				11
+#define TRCH_IPI0_IRQ_0				156
+#define RPU_IPI0_IRQ_0				33
+#define RPU_IPI1_IRQ_0				34
+#define APU_IPI0_IRQ_0				35
+#endif
 
 /dts-v1/;
 
@@ -63,7 +114,7 @@
         <0 0 HPPS_TRCH_MAILBOX_IRQ_1 &hpps_gic  0 HPPS_TRCH_MAILBOX_IRQ_1 4>,
         <0 0 HPPS_RTPS_MAILBOX_IRQ_0 &hpps_gic  0 HPPS_RTPS_MAILBOX_IRQ_0 4>,
         <0 0 HPPS_RTPS_MAILBOX_IRQ_1 &hpps_gic  0 HPPS_RTPS_MAILBOX_IRQ_1 4>,
-        <0 0 HSIO_UART0_IRQ_0        &hpps_gic  0 HSIO_UART0_IRQ_0        4>,
+        <0 0 HPPS_UART0_IRQ_0        &hpps_gic  0 HPPS_UART0_IRQ_0        4>,
         <0 0 XGMAC_IRQ_0             &hpps_gic  0 XGMAC_IRQ_0             4>,
         <0 0 XGMAC_IRQ_1_WAKE        &hpps_gic  0 XGMAC_IRQ_1_WAKE        4>,
         <0 0 HPPS_DMA_IRQ_0          &hpps_gic  0 HPPS_DMA_IRQ_0          4>,
@@ -192,7 +243,7 @@
         hpps_cpus {
             #address-cells = <2>;
 
-#define HPPS_CPU_PROS                                      \
+#define HPPS_CPU_PROPS                                      \
                 compatible = "cortex-a53-arm-cpu";        \
                 device_type = "cpu";                      \
                 #interrupt-cells = <1>;                   \
@@ -208,8 +259,8 @@
                 arm,ccsidr1 = <0x201fe019>;               \
                 enable-method = "psci";                   \
                 arm,reset-hivecs = <1>;                   \
-                arm,rvbar = <0xfffea000>;                 \
-                arm,reset-cbar = <A9_SCU>;                \
+                arm,rvbar = <0xfffda000>;                 \
+                arm,reset-cbar = <0xfd3fe000>;            \
                 mr = <&hpps>;                             \
                 memory = <&hpps>;                         \
                 memory_ns = <&hpps>;                      \
@@ -226,7 +277,7 @@
                 master-id = <MASTER_ID_HPPS_CPU0>;
             };
             hpps_cpu0: hpps_cpu@0 {
-                HPPS_CPU_PROS
+                HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #0";
 
                 reg = <0x0 0>;
@@ -250,7 +301,7 @@
                 master-id = <MASTER_ID_HPPS_CPU1>;
             };
             hpps_cpu1: hpps_cpu@1 {
-                HPPS_CPU_PROS
+                HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #1";
 
                 reg = <0x0 1>;
@@ -274,7 +325,7 @@
                 master-id = <MASTER_ID_HPPS_CPU2>;
             };
             hpps_cpu2: hpps_cpu@2 {
-                HPPS_CPU_PROS
+                HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #2";
 
                 reg = <0x0 2>;
@@ -298,7 +349,7 @@
                 master-id = <MASTER_ID_HPPS_CPU3>;
             };
             hpps_cpu3: hpps_cpu@3 {
-                HPPS_CPU_PROS
+                HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #3";
 
                 reg = <0x0 3>;
@@ -322,7 +373,7 @@
                 master-id = <MASTER_ID_HPPS_CPU4>;
             };
             hpps_cpu4: hpps_cpu@4 {
-                HPPS_CPU_PROS
+                HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #4";
 
                 reg = <0x0 0x104>;
@@ -346,7 +397,7 @@
                 master-id = <MASTER_ID_HPPS_CPU5>;
             };
             hpps_cpu5: hpps_cpu@5 {
-                HPPS_CPU_PROS
+                HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #5";
 
                 reg = <0x0 0x105>;
@@ -369,7 +420,7 @@
                 master-id = <MASTER_ID_HPPS_CPU6>;
             };
             hpps_cpu6: hpps_cpu@6 {
-                HPPS_CPU_PROS
+                HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #6";
 
                 reg = <0x0 0x106>;
@@ -392,7 +443,7 @@
                 master-id = <MASTER_ID_HPPS_CPU7>;
             };
             hpps_cpu7: hpps_cpu@7 {
-                HPPS_CPU_PROS
+                HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #7";
 
                 reg = <0x0 0x107>;
@@ -437,16 +488,16 @@
             cpu-id = <0>; /* TODO: could this be a ref to the cpu node? */
         };
 
-        trch_rom: trch_rom { /* accessed over I-/D-Code bus, so not over nic1 */
+        trch_rom: trch_rom@0x00000000 { /* accessed over I-/D-Code bus, so not over nic1 */
             compatible = "qemu:memory-region";
             qemu,ram = <1>;
-            reg = <TRCH_ROM TRCH_ROM_SIZE /* prio = */ 0x1>;
+            reg = <0x00000000 0x00100000 /* prio = */ 0x1>;
         };
 
         /* TODO: to be replaced with Boeing design for reset controller */
-        crf: crf@CRF_APB {
+        crf: crf@0xfd1a0000 {
             compatible = "xlnx,zynqmp_crf";
-            reg = <CRF_APB 0x110 /* prio = */ 0x0>;
+            reg = <0xfd1a0000 0x110 /* prio = */ 0x0>;
             gpio-controller;
             #gpio-cells = <1>;
         };
@@ -463,14 +514,14 @@
         compatible = "simple-bus";
         ranges ;
 
-        rtps_gic: interrupt-controller@RTPS_GIC_DIST {
+        rtps_gic: interrupt-controller@0xf9a00000 {
                 #address-cells = <0>;
                 #size-cells = <0>;
                 #interrupt-cells = <3>;
                 #gpio-cells = <0>;
                 compatible = "arm,arm-gicv3";
-                reg = <RTPS_GIC_DIST  0x20000    /* GICD */
-                       RTPS_GIC      0x100000>;    /* GICR */
+                reg = <0xf9a00000  0x20000    /* GICD */
+                       0xf9a01000 0x100000>;    /* GICR */
                 interrupt-controller ;
                 num-irq = <320>;
                 /* interrupts-extended = TODO; */
@@ -478,25 +529,9 @@
                 revision = <3>;
                 #redistributor-regions = <1>;
         };
-/*
-        rtps_gic: interrupt-controller@RTPS_GIC_DIST {
-            #interrupt-cells = <3>;
-            #size-cells = <0>;
-            compatible = "xlnx,zynqmp-scugic", "arm,gic";
-            reg = <0x0 RTPS_GIC_DIST 0x0 0x1000 0x0
-                   0x0 RTPS_GIC      0x0  0x100 0x0>;
-            status = "disabled";
-            interrupt-controller ;
-            num-irq = <256>;
-            nUm-cpu = <2>;
-            interrupts-extended =
-                <&rtps_cpu0 0>,
-                <&rtps_cpu1 0>;
-        };
-*/
 
         /* enabled in SPLIT mode only */
-        ddr_memory_2_for_rpu: ddr_memory_2_for_rpu {
+        ddr_memory_2_for_rpu: ddr_memory_2_for_rpu@0x3000000000000 {
                 compatible = "qemu:memory-region";
                 qemu,ram = <1>;
                 reg = <0x30000 0x00000000 0x00010000>;
@@ -613,14 +648,14 @@
         compatible = "simple-bus";
         ranges ;
 
-        hpps_gic: interrupt-controller@HPPS_GIC_DIST {
+        hpps_gic: interrupt-controller@0xf9000000 {
                 #address-cells = <0>;
                 #size-cells = <0>;
                 #interrupt-cells = <3>;
                 #gpio-cells = <0>;
                 compatible = "arm,arm-gicv3";
-                reg = < HPPS_GIC_DIST  0x20000    /* GICD */ /* prio = */ 0x0
-                        HPPS_GIC      0x100000    /* GICR */ /* prio = */ 0x0>;
+                reg = < 0xf9000000  0x20000    /* GICD */ /* prio = */ 0x0
+                        0xf9100000 0x100000    /* GICR */ /* prio = */ 0x0>;
                 interrupt-controller ;
                 num-irq = <320>;
                 interrupts-extended =
@@ -661,27 +696,27 @@
             clock-frequency = <100000000>;
         };
 
-        cxtsgen@IOU_SCNTR { /* TODO: present in Chiplet? ATF wants this. */
+        cxtsgen@0xff250000 { /* TODO: present in Chiplet? ATF wants this. */
                 compatible = "arm.generic-timer";
-                reg = <IOU_SCNTRS 0x1000 /* prio = */0x1>;
+                reg = <0xff260000 0x1000 /* prio = */0x1>;
         };
-        csu_core { /* TODO: present in Chiplet? Probably, not. ATF wants this. */
+        csu_core@0xffca0000 { /* TODO: present in Chiplet? Probably, not. ATF wants this. */
             compatible = "xlnx,zynqmp-csu-core";
-            reg = <CSU 0x100 /* prio = */ 0x1>;
+            reg = <0xffca0000 0x100 /* prio = */ 0x1>;
         };
 
         /* TODO: this will go away: no OCM on Chiplet */
-        hpps_rom: hpps_rom@HPPS_ROM {
+        hpps_rom: hpps_rom@0x00000000 {
             compatible = "qemu:memory-region";
             qemu,ram = <1>;
-            reg = <HPPS_ROM HPPS_ROM_SIZE /* prio = */ 0x1>;
+            reg = <0x00000000 0x40000 /* prio = */ 0x1>;
         };
 
         /* TODO: this will go away: no OCM on Chiplet */
-        hpps_sram: hpps_sram@HPPS_SRAM {
+        hpps_sram: hpps_sram@0xfffc0000 {
             compatible = "qemu:memory-region";
             qemu,ram = <1>;
-            reg = <HPPS_SRAM HPPS_SRAM_SIZE /* prio = */ 0x1>;
+            reg = <0xfffc0000 0x40000 /* prio = */ 0x1>;
         };
 
         to_ccn {
@@ -697,20 +732,20 @@
         compatible = "simple-bus";
         ranges ;
 
-        trch_sram: trch_sram { /* TODO: could this also be accessed over I-/D-Code bus?
-                                  If so, then we should move the definition one level
-                                  above and add aliases to both here nic1{} and trch{}  */
+        trch_sram: trch_sram@0x20000000 { /* TODO: could this also be accessed over I-/D-Code bus?
+                                             If so, then we should move the definition one level
+                                             above and add aliases to both here nic1{} and trch{}  */
             compatible = "qemu:memory-region";
             qemu,ram = <1>;
-            reg = <TRCH_SRAM TRCH_SRAM_SIZE /* prio = */ 0x1>;
+            reg = <0x20000000 0x100000 /* prio = */ 0x1>;
         };
 
         /* TODO: does this exist in HPSC? Which NIC is it connected to? */
-        crl: crl@CRL_APB {
+        crl: crl@0xff5e0000 {
             gpio-controller;
             #gpio-cells = <1>;
             compatible = "xlnx,zynqmp-crl";
-            reg = <CRL_APB 0x1000 /* prio = */ 0x0>;
+            reg = <0xff5e0000 0x1000 /* prio = */ 0x0>;
             num-gpios = <16>; // is it controller(3) or client(1)?
             // pmu_global_client_gpios[] in xilinx_zynqmp_pmu_global.c
             //        : out: "error_2_out"
@@ -721,9 +756,9 @@
 #endif
         };
 
-        trch_dma: dma-controller@TRCH_DMA {
+        trch_dma: dma-controller@0x3000b000 {
             compatible = "arm,pl330", "arm,primecell";
-            reg = <TRCH_DMA 0x1000 /* prio= */ 0x0>;
+            reg = <0x3000b000 0x1000 /* prio= */ 0x0>;
             interrupts = <TRCH_DMA_IRQ_0
                           TRCH_DMA_IRQ_1>;
             #dma-cells = <1>;
@@ -756,11 +791,11 @@
                 ranges ;
                 /* TODO: does this exist in HPSC? Which NIC is it connected to? */
                 /* TODO: move to nic1, since this is to be replaced by Boeing reset controller */
-                rpu_ctrl: rpu_control@RPU {
+                rpu_ctrl: rpu_control@0xff9a0000 {
                     gpio-controller;
                     #gpio-cells = <1>;
                     compatible = "xlnx,rpu-control";
-                    reg = <RPU 0x400 /* prio = */ 0>;
+                    reg = <0xff9a0000 0x400 /* prio = */ 0>;
                     atcm1-for-rpu0 = <&atcm1_for_rpu0>;
                     btcm1-for-rpu0 = <&btcm1_for_rpu0>;
                     icache-for-rpu1 = <&icache_rpu1>;
@@ -790,22 +825,22 @@
         compatible = "simple-bus";
         ranges ;
 
-        rtps_ddr_low: rtps_ddr_low { /* TODO: TZC400 */
+        rtps_ddr_low: rtps_ddr_low@0x40000000 { /* TODO: TZC400 */
             compatible = "qemu:memory-region";
             device_type = "memory";
-            reg = <RTPS_DDR_LOW 0x40000000>;
+            reg = <0x40000000 0x40000000>;
         };
 
-        rtps_smmu_reg: smmu_reg0@RTPS_SMMU_REG {
+        rtps_smmu_reg: smmu_reg0@0x38801000 {
             compatible = "xlnx,smmu-reg";
-            reg = <RTPS_SMMU_REG 0x1000>;
+            reg = <0x38801000 0x1000>;
             interrupt-controller;
             interrupts = <RTPS_SMMU_IRQ>;
         };
 
-        rtps_smmu: smmu0@RTPS_SMMU {
+        rtps_smmu: smmu0@0x38800000 {
             compatible = "arm,mmu-500";
-            reg-extended = <&nic3 RTPS_SMMU 0x10000 /* nic3? */
+            reg-extended = <&nic3 0x38800000 0x10000 /* nic3? */
                             &rtps_smmu_tbu0 0 0xffffffff 0xffffffff
                             /* &rtps_smmu_tb1 "PCIE" */
                             >;
@@ -822,9 +857,9 @@
             /* mr-1 = <&pcie>; */
         };
 
-        rtps_dma: dma-controller@RTPS_DMA {
+        rtps_dma: dma-controller@0x38440000 {
             compatible = "arm,pl330", "arm,primecell";
-            reg = <RTPS_DMA 0x1000>;
+            reg = <0x38440000 0x1000>;
             interrupts = <RTPS_DMA_IRQ_0
                           RTPS_DMA_IRQ_1>;
             #dma-cells = <1>;
@@ -837,15 +872,15 @@
         compatible = "simple-bus";
         ranges ;
 
-        rtps_trch_mailbox: mailbox@RTPS_TRCH_MAILBOX {
+        rtps_trch_mailbox: mailbox@0x3000a000 {
             compatible = "hpsc,hpsc-mbox";
             interrupts = <RTPS_TRCH_MAILBOX_IRQ_0 RTPS_TRCH_MAILBOX_IRQ_1>;
-            reg = <RTPS_TRCH_MAILBOX 0x80000>;
+            reg = <0x3000a000 0x80000>;
         };
 
-        lsio_uart_0: serial@LSIO_UART0 {
+        lsio_uart_0: serial@0x30000000 {
             compatible = "xlnx,ps7-uart-1.00.a", "xlnx,xuartps";
-            reg = <LSIO_UART0 0x1000>;
+            reg = <0x30000000 0x1000>;
             current-speed = <115200>;
             interrupts = <LSIO_UART0_IRQ_0>;
             port-number = <0>;
@@ -854,12 +889,11 @@
             clock-names = "uart_clk", "pclk";
             clocks = <&uart_clk &uart_clk>;
             ttrig-polarity = <1>;
-            status = "disabled";
         };
 
-        lsio_uart_1: serial@LSIO_UART1 {
+        lsio_uart_1: serial@0x30001000 {
             compatible = "xlnx,ps7-uart-1.00.a", "xlnx,xuartps";
-            reg = <LSIO_UART1 0x1000>;
+            reg = <0x30001000 0x1000>;
             current-speed = <115200>;
             interrupts = <LSIO_UART1_IRQ_0>;
             port-number = <0>;
@@ -868,7 +902,6 @@
             clock-names = "uart_clk", "pclk";
             clocks = <&uart_clk &uart_clk>;
             ttrig-polarity = <1>;
-            status = "disabled";
         };
 
             /* TODO: SMC353 */
@@ -882,16 +915,16 @@
         compatible = "simple-bus";
         ranges ;
 
-        hpps_smmu0_reg: smmu_reg0@HPPS_SMMU0_REG {
+        hpps_smmu0_reg: smmu_reg0@0xf92f1000 {
             compatible = "xlnx,smmu-reg";
-            reg = <HPPS_SMMU0_REG 0x1000 /* prio = */ 0x0>;
+            reg = <0xf92f1000 0x1000 /* prio = */ 0x0>;
             interrupt-controller;
             interrupts = <HPPS_SMMU0_IRQ>;
         };
 
-        hpps_smmu0: smmu0@HPPS_SMMU0 {
+        hpps_smmu0: smmu0@0xf92f0000 {
             compatible = "arm,mmu-500";
-            reg-extended = <&nic5 HPPS_SMMU0 0x10000  /* prio = */ 0x0 /* nic5? */
+            reg-extended = <&nic5 0xf92f0000 0x10000  /* prio = */ 0x0 /* nic5? */
                             &nic5 0          0xffffffff  /* prio = */  0xfffffffe>; /* master connected to slave interface of MMU */
 
             interrupt-parent = <&hpps_smmu0_reg>;
@@ -919,23 +952,23 @@
         compatible = "simple-bus";
         ranges ;
 
-        hpps_trch_mailbox: mailbox@HPPS_TRCH_MAILBOX {
+        hpps_trch_mailbox: mailbox@0xf9220000 {
             compatible = "hpsc,hpsc-mbox";
             interrupts = <HPPS_TRCH_MAILBOX_IRQ_0 HPPS_TRCH_MAILBOX_IRQ_1>;
-            reg = <HPPS_TRCH_MAILBOX 0x80000>;
+            reg = <0xf9220000 0x80000>;
         };
 
-        hpps_rtps_mailbox: mailbox@HPPS_RTPS_MAILBOX {
+        hpps_rtps_mailbox: mailbox@0xf9230000 {
             compatible = "hpsc,hpsc-mbox";
             interrupts = <HPPS_RTPS_MAILBOX_IRQ_0 HPPS_RTPS_MAILBOX_IRQ_1>;
-            reg = <HPPS_RTPS_MAILBOX 0x80000>;
+            reg = <0xf9230000 0x80000>;
         };
 
-        hsio_uart_0: serial@UART0 {
+        hpps_uart_0: serial@0xf92c0000 {
             compatible = "xlnx,ps7-uart-1.00.a", "xlnx,xuartps";
-            reg = <HSIO_UART0 0x1000>;
+            reg = <0xf92c0000 0x1000>;
             current-speed = <115200>;
-            interrupts = <HSIO_UART0_IRQ_0>;
+            interrupts = <HPPS_UART0_IRQ_0>;
             port-number = <1>;
             xlnx,has-modem = <0x0>;
             xlnx,uart-clk-freq-hz = <50000000>;
@@ -960,16 +993,16 @@
         compatible = "simple-bus";
         ranges ;
 
-        hpps_smmu1_reg: smmu_reg0@HPPS_SMMU1_REG {
+        hpps_smmu1_reg: smmu_reg0@0xf92f3000 {
                 compatible = "xlnx,smmu-reg";
-                reg = <HPPS_SMMU1_REG 0x1000>;
+                reg = <0xf92f3000 0x1000>;
                 interrupt-controller;
                 interrupts = <HPPS_SMMU1_IRQ>;
         };
 
-        hpps_smmu1: smmu1@HPPS_SMMU1 {
+        hpps_smmu1: smmu1@0xf92f2000 {
                 compatible = "arm,mmu-500";
-                reg-extended = <&nic7 HPPS_SMMU1 0x10000 /* nic7? */
+                reg-extended = <&nic7 0xf92f2000 0x10000 /* nic7? */
                                 &hpps_smmu1_tbu_dma   0 0xffffffff 0xffffffff
                                 &hpps_smmu1_tbu_xgmac 0 0xffffffff 0xffffffff>;
 
@@ -985,38 +1018,38 @@
                 /* mr-1 = <&pcie>; */
         };
             
-        hpps_dma: dma-controller@HPPS_DMA {
+        hpps_dma: dma-controller@0xf92e0000 {
             compatible = "arm,pl330", "arm,primecell";
-            reg = <HPPS_DMA 0x1000>;
+            reg = <0xf92e0000 0x1000>;
             interrupts = <HPPS_DMA_IRQ_0
                           HPPS_DMA_IRQ_1>;
             #dma-cells = <1>;
             dma = <&hpps_smmu1_tbu_dma>;
         };
 
-        srio0_dma: dma-controller@SRIO0_DMA {
+        srio0_dma: dma-controller@0xe5310000 {
             compatible = "arm,pl330", "arm,primecell";
-            reg = <SRIO0_DMA 0x1000>;
+            reg = <0xe5310000 0x1000>;
             interrupts = <SRIO0_DMA_IRQ_0
                           SRIO0_DMA_IRQ_1>;
             #dma-cells = <1>;
                         dma = <&nic7>;
         };
 
-        srio1_dma: dma-controller@SRIO1_DMA {
+        srio1_dma: dma-controller@0xe5320000 {
             compatible = "arm,pl330", "arm,primecell";
-            reg = <SRIO1_DMA 0x1000>;
+            reg = <0xe5320000 0x1000>;
             interrupts = <SRIO1_DMA_IRQ_0
                           SRIO1_DMA_IRQ_1>;
             #dma-cells = <1>;
             dma = <&nic7>;
         };
 
-        xgmac: ethernet@XGMAC {
+        xgmac: ethernet@0xe5300000 {
             #stream-id-cells = <0x1>;
             #address-cells = <1>;
             #size-cells = <0>;
-            reg = <XGMAC 0x1000>;
+            reg = <0xe5300000 0x1000>;
             clock-names = "hclk", "pclk";
             clocks = <&misc_clk>, <&misc_clk>;
             compatible = "xlnx,ps7-ethernet-1.00.a", "cdns,gem";  /* TODO: change to Synopsys DWC_ether */
@@ -1044,11 +1077,11 @@
         compatible = "simple-bus";
         ranges ;
 
-        hpps_ddr_low: hpps_ddr_low { /* TODO: TZC400 */
+        hpps_ddr_low: hpps_ddr_low@0x80000000 { /* TODO: TZC400 */
             compatible = "qemu:memory-region";
             device_type = "memory";
             qemu,ram = <1>;
-            reg = <HPPS_DDR_LOW 0x40000000 /* prio = */ 0x0>;
+            reg = <0x80000000 0x40000000 /* prio = */ 0x0>;
         };
 
         to_nic6 {
@@ -1079,6 +1112,7 @@
     };
 
     /* arm_generic_fdt insists on having a memory node at root: we won't use this */
+    /* TODO: get rid of this */
     dummy_memory: memory {
         compatible = "qemu:memory-region";
         qemu,ram = <1>;

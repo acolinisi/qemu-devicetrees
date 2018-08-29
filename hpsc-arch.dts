@@ -58,6 +58,7 @@
 / {
     #address-cells = <1>;
     #size-cells = <1>;
+    #interrupt-cells = <1>;
 
     /* We have to use a map, as opposed to the 'interrupt' property on each
        device if an interrupt might be connected to more than one interrupt
@@ -76,6 +77,7 @@
        number has a correspondence to real HW, however the interrupt ID
        has meaning only inside this device tree definition.
     */
+    interrupt-map-mask = <0x0 0x0 0xffff>;	/* 0 0 (don't know) 0xffff (IRQ#) */
     interrupt-map = 
         /*                       TRCH                                          */
         /* 3-cell int specifier      int ctrl  ? input #              int type  */ 

@@ -981,6 +981,7 @@
         hpps_smmu0: smmu0@0xf92f0000 {
             compatible = "arm,mmu-500";
             reg-extended = <&nic5 0xf92f0000 0x10000  /* prio = */ 0x0 /* nic5? */
+                            /* TODO: a narrower range? */
                             &nic5 0          0xffffffff  /* prio = */  0xfffffffe>; /* master connected to slave interface of MMU */
 
             interrupt-parent = <&hpps_smmu0_reg>;

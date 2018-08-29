@@ -376,8 +376,8 @@
                 HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #4";
 
-                reg = <0x0 0x104>;
-                arm,mp-affinity = <0x4>;
+                reg = <0x0 0x100>;
+                arm,mp-affinity = <0x100>;
 
                 gpios = <&crf 0x4>;
                 gpio-names = "rst_cntrl";
@@ -400,8 +400,8 @@
                 HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #5";
 
-                reg = <0x0 0x105>;
-                arm,mp-affinity = <0x5>;
+                reg = <0x0 0x101>;
+                arm,mp-affinity = <0x101>;
 
                 gpios = <&crf 0x5>;
                 gpio-names = "rst_cntrl";
@@ -423,8 +423,8 @@
                 HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #6";
 
-                reg = <0x0 0x106>;
-                arm,mp-affinity = <0x6>;
+                reg = <0x0 0x102>;
+                arm,mp-affinity = <0x102>;
 
                 gpios = <&crf 0x6>;
                 gpio-names = "rst_cntrl";
@@ -446,8 +446,8 @@
                 HPPS_CPU_PROPS
                 gdb-id = "HPPS Cortex-A53 #7";
 
-                reg = <0x0 0x107>;
-                arm,mp-affinity = <0x7>;
+                reg = <0x0 0x103>;
+                arm,mp-affinity = <0x103>;
 
                 gpios = <&crf 0x7>;
                 gpio-names = "rst_cntrl";
@@ -494,12 +494,11 @@
             reg = <0x00000000 0x00100000 /* prio = */ 0x1>;
         };
 
-        /* TODO: to be replaced with Boeing design for reset controller */
-        crf: crf@0xfd1a0000 {
-            compatible = "xlnx,zynqmp_crf";
-            reg = <0xfd1a0000 0x110 /* prio = */ 0x0>;
-            gpio-controller;
-            #gpio-cells = <1>;
+        /* TODO: crf will go away once TRCH reset controller is implemented */
+        to_crf_bus { /* TODO: temporary hack, because both TRCH and HPPS need this */
+            compatible = "qemu:memory-region";
+            alias = <&crf_bus>;
+            reg = <0x0 0xFFFFFFFF /* prio = -2 */ 0xfffffffe>;
         };
 
         to_nic1 {
@@ -642,6 +641,23 @@
         };
     };
 
+
+    crf_bus: crf_bus {
+        #priority-cells = <1>;
+
+        compatible = "simple-bus";
+        ranges ;
+
+        /* TODO: to be replaced with Boeing design for reset controller */
+        crf: crf@0xfd1a0000 {
+            compatible = "xlnx,zynqmp_crf";
+            reg = <0xfd1a0000 0x110 /* prio = */ 0x0>;
+            gpio-controller;
+            #gpio-cells = <1>;
+        };
+    };
+
+
     hpps: hpps { /* view of address space from HPPS CPUs */
         #priority-cells = <1>;
 
@@ -719,10 +735,64 @@
             reg = <0xfffc0000 0x40000 /* prio = */ 0x1>;
         };
 
+        /* TODO: crf will go away once TRCH reset controller is implemented */
+        to_crf_bus { /* TODO: temporary hack, because both TRCH and HPPS need this */
+            compatible = "qemu:memory-region";
+            alias = <&crf_bus>;
+            reg = <0x0 0xFFFFFFFF /* prio = -2 */ 0xfffffffe>;
+        };
+
+        /* TODO: Is necessary for ATF/Linux, but probaby needs to go away */
+        crl: crl@0xff5e0000 {
+            gpio-controller;
+            #gpio-cells = <1>;
+            compatible = "xlnx,zynqmp-crl";
+            reg = <0xff5e0000 0x1000 /* prio = */ 0x0>;
+            num-gpios = <16>; // is it controller(3) or client(1)?
+            // pmu_global_client_gpios[] in xilinx_zynqmp_pmu_global.c
+            //        : out: "error_2_out"
+            // crl: controller_gpios : 0[RST_R5(0)], 1(RST_R5(1)], 2(SRST_B)
+            // Then: if "error_2_out", RST_R5(0)?
+            gpios = <&pmu_global 26>;
+        };
+
+        /* TODO: Xilinx-specific? Needed by ATF/Linux */
+        apu: apu@0xfd5c0000 {
+            compatible = "xlnx,apu";
+            #gpio-cells = <1>;
+            reg = <0xfd5c0000 0x1000 /* prio= */ 0x0>;
+            cpu0 = <&hpps_cpu0>;
+            cpu1 = <&hpps_cpu1>;
+            cpu2 = <&hpps_cpu2>;
+            cpu3 = <&hpps_cpu3>;
+        };
+
+#if 1
+        /* TODO: Xilinx-specific? Needed by ATF/Linux */
+        apu1: apu1@0xfd5c1000 {
+            compatible = "xlnx,apu";
+            #gpio-cells = <1>;
+            reg = <0xfd5c1000 0x1000 /* prio= */ 0x0>;
+            cpu0 = <&hpps_cpu4>;
+            cpu1 = <&hpps_cpu5>;
+            cpu2 = <&hpps_cpu6>;
+            cpu3 = <&hpps_cpu7>;
+        };
+#endif
+
+        pmu_global: pmu_global@0xffd80000 {
+            compatible = "xlnx,pmu_global";
+            reg = <0xffd80000 0x40000 /* prio= */ 0x0>;
+            gpio-controller;
+            #gpio-cells = <1>;
+            num-gpios = <30>; /* pmu_global_client_gpios(30), pmu_global_controller_gpios(3 or 4) in xilinx_zynqmp_pmu_global.c */
+            ignore-pwr-req = <1>;
+        };
+
         to_ccn {
             compatible = "qemu:memory-region";
             alias = <&ccn>;
-            reg = <0x0 0xFFFFFFFF /* prio = -1 */ 0xffffffff>;
+            reg = <0x0 0xFFFFFFFF /* prio = -1 */ 0xfffffffe>;
         };
     };
 
@@ -738,22 +808,6 @@
             compatible = "qemu:memory-region";
             qemu,ram = <1>;
             reg = <0x20000000 0x100000 /* prio = */ 0x1>;
-        };
-
-        /* TODO: does this exist in HPSC? Which NIC is it connected to? */
-        crl: crl@0xff5e0000 {
-            gpio-controller;
-            #gpio-cells = <1>;
-            compatible = "xlnx,zynqmp-crl";
-            reg = <0xff5e0000 0x1000 /* prio = */ 0x0>;
-            num-gpios = <16>; // is it controller(3) or client(1)?
-            // pmu_global_client_gpios[] in xilinx_zynqmp_pmu_global.c
-            //        : out: "error_2_out"
-            // crl: controller_gpios : 0[RST_R5(0)], 1(RST_R5(1)], 2(SRST_B)
-            // Then: if "error_2_out", RST_R5(0)?
-#if 0 /* what is this used for? */
-            gpios = <&pmu_global 26>;
-#endif
         };
 
         trch_dma: dma-controller@0x3000b000 {

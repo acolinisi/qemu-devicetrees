@@ -521,8 +521,8 @@
                 #interrupt-cells = <3>;
                 #gpio-cells = <0>;
                 compatible = "arm,arm-gicv3";
-                reg = <0xf9a00000  0x20000    /* GICD */
-                       0xf9a01000 0x100000>;    /* GICR */
+                reg = <0xf9a00000 /* WARN: this size value is unused; hardcoded in source code */  0x20000    /* GICD */
+                       0xf9a01000 /* WARN: this size value is unused; hardcoded in source code */ 0x100000>;  /* GICR */
                 interrupt-controller ;
                 num-irq = <320>;
                 /* interrupts-extended = TODO; */
@@ -672,8 +672,8 @@
                 #interrupt-cells = <3>;
                 #gpio-cells = <0>;
                 compatible = "arm,arm-gicv3";
-                reg = < 0xf9000000  0x20000    /* GICD */ /* prio = */ 0x0
-                        0xf9100000 0x100000    /* GICR */ /* prio = */ 0x0>;
+                reg = < 0xf9000000  /* WARN: this size value is unused; hardcoded in source code */ 0x20000    /* prio = */ 0x0   /* GICD */
+                        0xf9100000  /* WARN: this size value is unused; hardcoded in source code */ 0x100000   /* prio = */ 0x0>; /* GICR */
                 interrupt-controller ;
                 num-irq = <320>;
                 interrupts-extended =

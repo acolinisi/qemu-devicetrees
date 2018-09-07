@@ -209,7 +209,7 @@
                 RTPS_CPU_PROPS
                 reg = <0>;
                 gdb-id = "RTPS Cortex-R52 #0";
-                arm,mp-affinity = <0x200>;
+                arm,mp-affinity = <0x0>;
 
                 mr = <&rtps0>;
                 memory = <&rtps0>;
@@ -234,7 +234,7 @@
                 RTPS_CPU_PROPS
                 reg = <1>;
                 gdb-id = "RTPS Cortex-R52 #1";
-                arm,mp-affinity = <0x201>;
+                arm,mp-affinity = <0x1>;
 
                 mr = <&rtps1>;
                 memory = <&rtps1>;

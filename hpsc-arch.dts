@@ -984,7 +984,7 @@
 
         rtps_dma: dma-controller@0x38440000 {
             compatible = "arm,pl330", "arm,primecell";
-            reg = <0x38440000 0x1000>;
+            reg = <0x38440000 0x1000 /* prio= */ 0x0>;
             interrupts = <RTPS_DMA_IRQ_0
                           RTPS_DMA_IRQ_1>;
             #dma-cells = <1>;

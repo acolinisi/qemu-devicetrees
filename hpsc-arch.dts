@@ -837,7 +837,6 @@
             cpu3 = <&hpps_cpu3>;
         };
 
-#if 1
         /* TODO: Xilinx-specific? Needed by ATF/Linux */
         apu1: apu1@0xfd5c1000 {
             compatible = "xlnx,apu";
@@ -848,7 +847,6 @@
             cpu2 = <&hpps_cpu6>;
             cpu3 = <&hpps_cpu7>;
         };
-#endif
 
         pmu_global: pmu_global@0xffd80000 {
             compatible = "xlnx,pmu_global";

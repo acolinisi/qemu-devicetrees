@@ -513,10 +513,15 @@
             reg = <0x00000000 0x00100000 /* prio = */ 0x1>;
         };
 
-        /* TODO: crf will go away once TRCH reset controller is implemented */
+        /* TODO: crf and crl will go away once TRCH reset controller is implemented */
         to_crf_bus { /* TODO: temporary hack, because both TRCH and HPPS need this */
             compatible = "qemu:memory-region";
             alias = <&crf_bus>;
+            reg = <0x0 0xFFFFFFFF /* prio = -2 */ 0xfffffffe>;
+        };
+        to_crl_bus { /* TODO: temporary hack, because both TRCH and HPPS need this */
+            compatible = "qemu:memory-region";
+            alias = <&crl_bus>;
             reg = <0x0 0xFFFFFFFF /* prio = -2 */ 0xfffffffe>;
         };
 
@@ -709,6 +714,26 @@
         };
     };
 
+    crl_bus: crl_bus {
+        #priority-cells = <1>;
+
+        compatible = "simple-bus";
+        ranges ;
+
+        /* TODO: to be replaced with Boeing design for reset controller */
+        crl: crl@0xff5e0000 {
+            gpio-controller;
+            #gpio-cells = <1>;
+            compatible = "xlnx,zynqmp-crl";
+            reg = <0xff5e0000 0x1000 /* prio = */ 0x0>;
+            num-gpios = <16>; // is it controller(3) or client(1)?
+            // pmu_global_client_gpios[] in xilinx_zynqmp_pmu_global.c
+            //        : out: "error_2_out"
+            // crl: controller_gpios : 0[RST_R5(0)], 1(RST_R5(1)], 2(SRST_B)
+            // Then: if "error_2_out", RST_R5(0)?
+            gpios = <&pmu_global 26>;
+        };
+    };
 
     hpps: hpps { /* view of address space from HPPS CPUs */
         #priority-cells = <1>;
@@ -789,25 +814,16 @@
             reg = <0xfffc0000 0x40000 /* prio = */ 0x1>;
         };
 
-        /* TODO: crf will go away once TRCH reset controller is implemented */
+        /* TODO: crf and crl will go away once TRCH reset controller is implemented */
         to_crf_bus { /* TODO: temporary hack, because both TRCH and HPPS need this */
             compatible = "qemu:memory-region";
             alias = <&crf_bus>;
             reg = <0x0 0xFFFFFFFF /* prio = -2 */ 0xfffffffe>;
         };
-
-        /* TODO: Is necessary for ATF/Linux, but probaby needs to go away */
-        crl: crl@0xff5e0000 {
-            gpio-controller;
-            #gpio-cells = <1>;
-            compatible = "xlnx,zynqmp-crl";
-            reg = <0xff5e0000 0x1000 /* prio = */ 0x0>;
-            num-gpios = <16>; // is it controller(3) or client(1)?
-            // pmu_global_client_gpios[] in xilinx_zynqmp_pmu_global.c
-            //        : out: "error_2_out"
-            // crl: controller_gpios : 0[RST_R5(0)], 1(RST_R5(1)], 2(SRST_B)
-            // Then: if "error_2_out", RST_R5(0)?
-            gpios = <&pmu_global 26>;
+        to_crl_bus { /* TODO: temporary hack, because both TRCH and HPPS need this */
+            compatible = "qemu:memory-region";
+            alias = <&crl_bus>;
+            reg = <0x0 0xFFFFFFFF /* prio = -2 */ 0xfffffffe>;
         };
 
         /* TODO: Xilinx-specific? Needed by ATF/Linux */

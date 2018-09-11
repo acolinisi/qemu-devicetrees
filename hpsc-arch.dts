@@ -607,103 +607,92 @@
     };
 
     rtps0: rtps@0 { /* view of address space from RTPS CPU0 */
-        #size-cells = <2>;
         #priority-cells = <1>;
 
         compatible = "simple-bus";
         ranges ;
 
-        tcm_cache_rpu0: tcm_cache_rpu0@0 {
+        tcm_ram_r5_0_A: tcm_ram_r5_0_A@0x00000 {
             compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <0x0 0x10000 /* prio = */ 0x1>;
+        };
 
-            tcm_ram_r5_0_A: tcm_ram_r5_0_A@0x00000 {
-                compatible = "qemu:memory-region";
-                qemu,ram = <1>;
-                reg = <0x0 0x10000 0x1>;
-            };
+        /* alias into RPU1 TCM for lockstep mode */
+        atcm1_for_rpu0: atcm1_for_rpu0 {
+            compatible = "qemu:memory-region";
+            alias = <&tcm_ram_r5_1_A>;
+            reg = <0x10000 0x10000 /* prio = */ 0x1>;
+        };
 
-            /* alias into RPU1 TCM for lockstep mode */
-            atcm1_for_rpu0: atcm1_for_rpu0 {
-                compatible = "qemu:memory-region";
-                alias = <&tcm_ram_r5_1_A>;
-                reg = <0x10000 0x0 0x10000 0x1>;
-            };
+        tcm_ram_r5_0_B: tcm_ram_r5_0_B@0x20000 {
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <0x20000 0x10000 /* prio = */ 0x1>;
+        };
 
-            tcm_ram_r5_0_B: tcm_ram_r5_0_B@0x20000 {
-                compatible = "qemu:memory-region";
-                qemu,ram = <1>;
-                reg = <0x20000 0x0 0x10000 0x1>;
-            };
+        /* alias into RPU1 TCM for lockstep mode */
+        btcm1_for_rpu0: btcm1_for_rpu0 {
+            compatible = "qemu:memory-region";
+            alias = <&tcm_ram_r5_1_B>;
+            reg = <0x30000 0x10000 /* prio = */ 0x1>;
+        };
 
-            /* alias into RPU1 TCM for lockstep mode */
-            btcm1_for_rpu0: btcm1_for_rpu0 {
-                compatible = "qemu:memory-region";
-                alias = <&tcm_ram_r5_1_B>;
-                reg = <0x30000 0x0 0x10000 0x1>;
-            };
+        icache_rpu0: icache_rpu0@0x40000 {
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <0x40000 0x8000 /* prio = */ 0x1>;
+        };
 
-            icache_rpu0: icache_rpu0@0x40000 {
-                compatible = "qemu:memory-region";
-                qemu,ram = <1>;
-                reg = <0x40000 0x8000>;
-            };
-
-            dcache_rpu0: dcache_rpu0@0x50000 {
-                compatible = "qemu:memory-region";
-                qemu,ram = <1>;
-                reg = <0x50000 0x8000>;
-            };
+        dcache_rpu0: dcache_rpu0@0x50000 {
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <0x50000 0x8000 /* prio = */ 0x1>;
         };
 
         to_rtps {
             compatible = "qemu:memory-region";
             alias = <&rtps>;
-            reg = <0x0 0xffffffff 0xffffffff /* prio */ 0xffffffff /* -1 */>;
+            reg = <0x0 0xffffffff /* prio */ 0xffffffff /* -1 */>;
         };
     };
 
     rtps1: rtps@1 {  /* view of address space from RTPS CPU0 */
-        #size-cells = <2>;
         #priority-cells = <1>;
 
         compatible = "simple-bus";
         ranges ;
 
-        tcm_cache_rpu1: tcm_cache_rpu1@0 {
+        tcm_ram_r5_1_A: tcm_ram_r5_1_A@0x00000 {
             compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <0x0 0x10000 /* prio= */ 0x1>;
+        };
 
-            tcm_ram_r5_1_A: tcm_ram_r5_1_A@0x00000 {
-                compatible = "qemu:memory-region";
-                qemu,ram = <1>;
-                reg = <0x0 0x10000 0x1>;
-            };
+        tcm_ram_r5_1_B: tcm_ram_r5_1_B@0x20000 {
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <0x20000 0x10000 /* prio= */ 0x1>;
+        };
 
-            tcm_ram_r5_1_B: tcm_ram_r5_1_B@0x20000 {
-                compatible = "qemu:memory-region";
-                qemu,ram = <1>;
-                reg = <0x20000 0x0 0x10000 0x1>;
-            };
+        icache_rpu1: icache_rpu1@0x30000 {
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <0x30000 0x8000 /* prio= */ 0x1>;
+        };
 
-            icache_rpu1: icache_rpu1@0x30000 {
-                compatible = "qemu:memory-region";
-                qemu,ram = <1>;
-                reg = <0x30000 0x8000>;
-            };
-
-            dcache_rpu1: dcache_rpu1@0x40000 {
-                compatible = "qemu:memory-region";
-                qemu,ram = <1>;
-                reg = <0x40000 0x8000>;
-            };
+        dcache_rpu1: dcache_rpu1@0x40000 {
+            compatible = "qemu:memory-region";
+            qemu,ram = <1>;
+            reg = <0x40000 0x8000 /* prio= */ 0x1>;
         };
 
         to_rtps {
             compatible = "qemu:memory-region";
             alias = <&rtps>;
-            reg = <0x0 0xffffffff 0xffffffff /* prio */ 0xffffffff /* -1 */>;
+            reg = <0x0 0xffffffff /* prio */ 0xffffffff /* -1 */>;
         };
     };
-
 
     crf_bus: crf_bus {
         #priority-cells = <1>;

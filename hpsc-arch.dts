@@ -991,6 +991,11 @@
             dma = <&rtps_smmu_tbu0>;
         };
 
+        to_nic5 {
+            compatible = "qemu:memory-region";
+            alias = <&nic5>;
+            reg = <0x0 0xffffffff /* prio */ 0xffffffff /* -1 */>;
+        };
     };
 
     nic4: nic4 { /* lsio */

@@ -946,13 +946,14 @@
     };
 
     nic3: nic3 {
+        #priority-cells = <1>;
         compatible = "simple-bus";
         ranges ;
 
         rtps_ddr_low: rtps_ddr_low@0x40000000 { /* TODO: TZC400 */
             compatible = "qemu:memory-region";
             device_type = "memory";
-            reg = <0x40000000 0x40000000>;
+            reg = <0x40000000 0x40000000 /* prio= */ 0x0>;
         };
 
         rtps_smmu_reg: smmu_reg0@0x38801000 {
@@ -964,8 +965,8 @@
 
         rtps_smmu: smmu0@0x38800000 {
             compatible = "arm,mmu-500";
-            reg-extended = <&nic3 0x38800000 0x10000 /* nic3? */
-                            &rtps_smmu_tbu0 0 0xffffffff 0xffffffff
+            reg-extended = <&nic3 0x38800000 0x10000  /* prio= */ 0x0 /* nic3? */
+                            &rtps_smmu_tbu0 0 0xffffffff 0xfffffff /* prio= */ 0x0f
                             /* &rtps_smmu_tb1 "PCIE" */
                             >;
 
